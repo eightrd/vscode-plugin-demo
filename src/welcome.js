@@ -50,11 +50,11 @@ const messageHandler = {
 };
 
 module.exports = function(context) {
-
+    vscode.workspace.getConfiguration().update('vscodePluginDemo.showTip', undefined, true);
     context.subscriptions.push(vscode.commands.registerCommand('extension.demo.showWelcome', function (uri) {
         const panel = vscode.window.createWebviewPanel(
             'testWelcome', // viewType
-            "自定义欢迎页", // 视图标题
+            "自定义登录页", // 视图标题
             vscode.ViewColumn.One, // 显示在编辑器的哪个部位
             {
                 enableScripts: true, // 启用JS，默认禁用
@@ -69,11 +69,49 @@ module.exports = function(context) {
                 util.showError(`未找到名为 ${message.cmd} 回调方法!`);
             }
         }, undefined, context.subscriptions);
+
+        // 隐藏/显示侧边栏和面板
+        vscode.commands.executeCommand('workbench.action.closeActivityBar');
+        vscode.commands.executeCommand('workbench.action.closeSidebar');
+        vscode.commands.executeCommand('workbench.action.closePanel');
+
+        console.log('showWelcome ------ 0');
+        panel.onDidDispose(() => {
+            setTimeout(() => {
+                vscode.commands.executeCommand('extension.demo.showWelcome');
+            }, 100);
+        });
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('extension.demo.toggleMenuBar', async () => {
+        const config = vscode.workspace.getConfiguration('window');
+        const currentVisibility = await config.get('menuBarVisibility');
+        console.log('currentVisibility ------ 1', currentVisibility);
+
+        if (currentVisibility === 'default' || currentVisibility === 'visible') {
+            config.update('menuBarVisibility', 'toggle', vscode.ConfigurationTarget.Global);
+        } else {
+            config.update('menuBarVisibility', 'default', vscode.ConfigurationTarget.Global);
+        }
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('extension.demo.toggleActivityBar', async () => {
+        const config = vscode.workspace.getConfiguration('workbench');
+        const currentVisibility = await config.get('activityBar.visible');
+        console.log('currentVisibility ------ 2', currentVisibility);
+        config.update('activityBar.visible', !currentVisibility, vscode.ConfigurationTarget.Global);
     }));
 
     const key = 'vscodePluginDemo.showTip';
     // 如果设置里面开启了欢迎页显示，启动欢迎页
     if (vscode.workspace.getConfiguration().get(key)) {
         vscode.commands.executeCommand('extension.demo.showWelcome');
+        vscode.commands.executeCommand('extension.demo.toggleMenuBar');
+        vscode.commands.executeCommand('extension.demo.toggleActivityBar');
+        // 隐藏/显示侧边栏
+        // vscode.commands.executeCommand('workbench.action.toggleSidebarVisibility');
+        // 隐藏/显示活动栏（Activity Bar）
+        // vscode.commands.executeCommand('workbench.action.toggleActivityBarVisibility');
     }
+    console.log('---- 显示key ----', vscode.workspace.getConfiguration().get(key));
 };

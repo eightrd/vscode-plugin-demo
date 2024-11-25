@@ -172,11 +172,12 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
-        "eslint": "^4.11.0",
+        "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+        "@types/vscode": "^1.95.0",
+        "eslint": "^4.11.0",
+        "typescript": "^2.6.1",
+        "vscode-test": "^1.6.1"
     },
     "license": "SEE LICENSE IN LICENSE.txt",
     "bugs": {

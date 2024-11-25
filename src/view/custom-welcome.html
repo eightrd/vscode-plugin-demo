@@ -72,17 +72,24 @@
 
 <body>
     <div id="app" class="container-fluid">
-        <h3 class="page-title">自定义欢迎页</h3>
+        <h3 class="page-title">登录信息页</h3>
         <p class="alert alert-success" style="width: 300px;">{{userName}}，{{time}}好！</p>
         <form class="form-horizontal">
-            <div class="form-group">
-                <div class="col-sm-6">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" v-model="show"> 启动时显示自定义欢迎页
-                        </label>
-                    </div>
+            <div class="col-sm-6">
+                <input type="text" name="username" placeholder="Username" required><br><br>
+            </div>
+            <div class="col-sm-6">
+                <input type="password" name="password" placeholder="Password" required><br><br>
+            </div>
+            <div class="col-sm-6">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" v-model="show"> 始终显示获取登录信息页
+                    </label>
                 </div>
+            </div>
+            <div class="col-sm-6">
+                <button type="submit">登录</button>
             </div>
         </form>
 
